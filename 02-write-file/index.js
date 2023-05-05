@@ -3,7 +3,6 @@ const { stdin: input , stdout: output } = require('node:process');
 const { createWriteStream } = require('fs');
 const path = require('path');
 
-
 const readfile = (filename) => {
   const greeting = 'Hello, I am C-3PO, human cyborg relations.\nFill my memory with better words, please...\n';
   const parting = '...and taking one last look... at my friends\n';
@@ -13,8 +12,8 @@ const readfile = (filename) => {
   };
 
   const rl = readline.createInterface({ input, output });
-  const filepath = path.join(__dirname, filename)
-  const stream = createWriteStream(filepath)
+  const filepath = path.join(__dirname, filename);
+  const stream = createWriteStream(filepath);
   
   rl.write(greeting);
   rl.on('line', (input) => {
