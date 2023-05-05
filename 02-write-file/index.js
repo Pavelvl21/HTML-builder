@@ -5,8 +5,8 @@ const path = require('path');
 
 
 const readfile = (filename) => {
-  const greeting = 'Hello, I am C-3PO, human cyborg relations.\nFill my memory with better words, please\n';
-  const parting = 'Taking one last look... at my friends\n';
+  const greeting = 'Hello, I am C-3PO, human cyborg relations.\nFill my memory with better words, please...\n';
+  const parting = '...and taking one last look... at my friends\n';
   const closeConsole = () => {
     rl.close();
     output.write(parting);
@@ -18,9 +18,9 @@ const readfile = (filename) => {
   
   rl.write(greeting);
   rl.on('line', (input) => {
-    const writeableInput = input === 'exit' ? closeConsole() : input;
+    const writeableInput = input.trim().toLowerCase() === 'exit' ? closeConsole() : input;
     stream.write(`${writeableInput}\n`);
-  })
+  });
   rl.on('SIGINT', () => {
     rl.close();
     output.write(parting);
