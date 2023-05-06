@@ -2,7 +2,7 @@ const readline = require('node:readline');
 const { stdin: input , stdout: output } = require('node:process');
 const { createWriteStream } = require('fs');
 const path = require('path');
-const { EOL } = require('os')
+const { EOL } = require('os');
 
 const readfile = (filename) => {
   const greeting = `Hello, I am C-3PO, human cyborg relations.${EOL}Fill my memory with better words, please...${EOL}`;

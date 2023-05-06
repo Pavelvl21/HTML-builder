@@ -1,7 +1,7 @@
 const { readdir, stat } = require('node:fs/promises');
 const { resolve } = require('node:path');
 const { stdout } = process;
-const { EOL } = require('os')
+const { EOL } = require('os');
 
 
 const getFormattedData = (name, size) => {

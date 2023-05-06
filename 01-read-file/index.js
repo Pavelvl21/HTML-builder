@@ -1,7 +1,7 @@
 const { createReadStream } = require('fs');
 const { resolve } = require('node:path');
 const { stdout } = process;
-const { EOL } = require('os')
+const { EOL } = require('os');
 
 const readFile = (filename) => {
   const filepath = resolve(__dirname, filename);
