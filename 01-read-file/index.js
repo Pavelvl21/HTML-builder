@@ -7,7 +7,7 @@ const readFile = (filename) => {
   const stream = createReadStream(filepath, 'utf-8');
 
   stream.on('data', (chunk) => stdout.write(chunk));
-  stream.on('error', (error) => stdout.write(error));
+  stream.on('error', ({ message }) => stdout.write(`${message}\n`));
 };
 
 readFile('text.txt');
