@@ -1,5 +1,5 @@
 const readline = require('node:readline');
-const { stdin: input , stdout: output } = require('node:process');
+const { stdin: input, stdout: output } = require('node:process');
 const { createWriteStream } = require('fs');
 const path = require('path');
 const { EOL } = require('os');
@@ -22,15 +22,15 @@ const readfile = (filename) => {
     rl.close();
   };
 
-  const handleWrite = (input) => {
-    const writeableInput = input.trim().toLowerCase() === 'exit' ? handleClose() : input;
+  const handleWrite = (inputText) => {
+    const writeableInput = inputText.trim().toLowerCase() === 'exit' ? handleClose() : inputText;
     stream.write(`${writeableInput}${EOL}`);
   };
 
   rl.write(greeting);
   rl.on('line', handleWrite);
   rl.on('SIGINT', handleClose);
-  stream.on('error', handleError);  
+  stream.on('error', handleError);
 };
 
 readfile('c3poMemory.txt');
