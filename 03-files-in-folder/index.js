@@ -12,14 +12,18 @@ const getFormattedData = (name, size) => {
 const getInfo = async (filename) => {
   const dirPath = resolve(__dirname, filename);
   const options = { withFileTypes: true };
-  const filepaths = await readdir(dirPath, options);
-  filepaths
-    .filter((dirent) => dirent.isFile())
-    .forEach(async ({ name }) => {
-      const filepath = resolve(dirPath, name);
-      const { size } = await stat(filepath);
-      getFormattedData(name, size);
-    });
+  try {
+    const filepaths = await readdir(dirPath, options);
+    filepaths
+      .filter((dirent) => dirent.isFile())
+      .forEach(async ({ name }) => {
+        const filepath = resolve(dirPath, name);
+        const { size } = await stat(filepath);
+        getFormattedData(name, size);
+      });
+  } catch({ message }) {
+    stdout.write(`${message}\n`);
+  }
 };
 
 getInfo('secret-folder');
