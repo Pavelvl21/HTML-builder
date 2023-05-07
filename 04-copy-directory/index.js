@@ -50,8 +50,13 @@ const copyDir = async (dirname) => {
   const dirent = resolve(__dirname, dirname);
   const dest = resolve(__dirname, `${dirname}-copy`);
 
-  await rm(dest, { recursive: true, force: true });
-  await copyFiles(dirent, dest);
+  try {
+    await rm(dest, { recursive: true, force: true });
+    await copyFiles(dirent, dest);
+  } catch ({ message }) {
+    stdout.write(`\x1b[31m${message}${EOL}`);
+    throw message;
+  }
 };
 
 copyDir('files');
