@@ -1,7 +1,7 @@
 const readline = require('node:readline');
 const { stdin: input, stdout: output } = require('node:process');
 const { createWriteStream } = require('fs');
-const path = require('path');
+const { resolve } = require('node:path');
 const { EOL } = require('os');
 
 const readfile = (filename) => {
@@ -9,7 +9,7 @@ const readfile = (filename) => {
   const parting = `...and taking one last look... at my friends${EOL}`;
 
   const rl = readline.createInterface({ input, output });
-  const filepath = path.join(__dirname, filename);
+  const filepath = resolve(__dirname, filename);
   const stream = createWriteStream(filepath);
 
   const handleClose = () => {

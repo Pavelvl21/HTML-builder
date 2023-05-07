@@ -1,13 +1,14 @@
 const { readdir, stat } = require('node:fs/promises');
 const { resolve } = require('node:path');
-
-const { stdout } = process;
 const { EOL } = require('os');
 
+const { stdout } = process;
+
 const getFormattedData = (name, size) => {
-  const [filename, extension] = name.split('.');
+  const filename = name.substring(0, name.indexOf('.'));
+  const extname = name.slice(name.lastIndexOf('.') + 1);
   const filesize = `${(size / 1024).toFixed(3)}kb`;
-  stdout.write(`${filename} - ${extension} - ${filesize}${EOL}`);
+  stdout.write(`${filename} - ${extname} - ${filesize}${EOL}`);
 };
 
 const getInfo = async (filename) => {
