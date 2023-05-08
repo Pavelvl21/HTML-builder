@@ -7,7 +7,7 @@ const { stdout } = process;
 const getFormattedData = (name, size) => {
   const filename = name.substring(0, name.indexOf('.'));
   const extname = name.slice(name.lastIndexOf('.') + 1);
-  const filesize = `${(size / 1024).toFixed(3)}kb`;
+  const filesize = `${size}B`;
   stdout.write(`${filename} - ${extname} - ${filesize}${EOL}`);
 };
 
