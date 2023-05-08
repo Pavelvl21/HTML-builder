@@ -1,5 +1,5 @@
 const readline = require('node:readline');
-const { stdin: input, stdout: output } = require('node:process');
+const { stdin: input, stdout: output, exit } = require('node:process');
 const { createWriteStream } = require('fs');
 const { resolve } = require('node:path');
 const { EOL } = require('os');
@@ -25,13 +25,13 @@ const readfile = (filename) => {
   const stream = createWriteStream(filepath);
 
   const handleClose = () => {
-    rl.close();
     output.write(parting);
+    exit();
   };
 
   const handleError = ({ message }) => {
     output.write(`${message}${EOL}`);
-    rl.close();
+    exit();
   };
 
   const handleWrite = (inputText) => {
