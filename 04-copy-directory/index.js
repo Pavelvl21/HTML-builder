@@ -9,9 +9,25 @@ const { EOL } = require('os');
 
 const { stdout } = process;
 
+const colors = {
+  reset: '\x1b[0m',
+  underscore: '\x1b[4m',
+  green: '\x1b[32m',
+  red: '\x1b[31m',
+  tab: '\t',
+};
+
+const {
+  reset,
+  underscore,
+  green,
+  red,
+  tab,
+} = colors;
+
 const successMessage = (name, hasError) => new Promise((res) => {
   const message = !hasError
-    ? `\x1b[4m${name}\x1b[0m:\x1b[32m\tok!\x1b[0m${EOL}`
+    ? `${underscore}${name}${reset}:${green}${tab}ok!${reset}${EOL}`
     : `${name}: FAILED!${EOL}`;
   res(message);
 });
@@ -42,7 +58,7 @@ const copyFiles = async (src, dest) => {
     });
   } catch ({ message }) {
     state.hasError = 'true';
-    stdout.write(`\x1b[31m${message}${EOL}`);
+    stdout.write(`${red}${message}${EOL}`);
   }
 };
 
@@ -54,8 +70,8 @@ const copyDir = async (dirname) => {
     await rm(dest, { recursive: true, force: true });
     await copyFiles(src, dest);
   } catch ({ message }) {
-    stdout.write(`\x1b[31m${message}${EOL}`);
-    throw message;
+    state.hasError = 'true';
+    stdout.write(`${red}${message}${EOL}`);
   }
 };
 

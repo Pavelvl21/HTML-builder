@@ -4,9 +4,21 @@ const { createWriteStream } = require('fs');
 const { resolve } = require('node:path');
 const { EOL } = require('os');
 
+const colors = {
+  reset: '\x1b[0m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+};
+
+const {
+  reset,
+  green,
+  yellow,
+} = colors;
+
 const readfile = (filename) => {
-  const greeting = `Hello, I am C-3PO, human cyborg relations.${EOL}Fill my memory with better words, please...${EOL}`;
-  const parting = `...and taking one last look... at my friends${EOL}`;
+  const greeting = `Hello, I am ${yellow}C-3PO${reset}, human cyborg relations.${EOL}Fill my memory with better words, please...${EOL}`;
+  const parting = `${green}...and taking one last look... at my friends${reset}${EOL}`;
 
   const rl = readline.createInterface({ input, output });
   const filepath = resolve(__dirname, filename);

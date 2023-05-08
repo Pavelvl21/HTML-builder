@@ -4,10 +4,22 @@ const { EOL } = require('os');
 
 const { stdout } = process;
 
+const colors = {
+  reset: '\x1b[0m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+};
+
+const {
+  reset,
+  green,
+  yellow,
+} = colors;
+
 const getFormattedData = (name, size) => {
   const filename = name.substring(0, name.indexOf('.'));
   const extname = name.slice(name.lastIndexOf('.') + 1);
-  const filesize = `${size}B`;
+  const filesize = `${yellow}${size}${reset}${green}B${reset}`;
   stdout.write(`${filename} - ${extname} - ${filesize}${EOL}`);
 };
 
