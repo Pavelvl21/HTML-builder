@@ -8,43 +8,53 @@ const { createWriteStream } = require('fs');
 
 const { stdout } = process;
 
-const successMessage = (name, hasError) => new Promise((res) => {
-  const message = !hasError
-    ? `\x1b[4m${name}\x1b[0m:\x1b[32m\tok!\x1b[0m${EOL}`
-    : `${name}: FAILED!${EOL}`;
-  res(message);
-});
-
 const state = {
   hasError: false,
 };
+const colors = {
+  reset: '\x1b[0m',
+  underscore: '\x1b[4m',
+  green: '\x1b[32m',
+  red: '\x1b[31m',
+  tab: '\t',
+};
+
+const {
+  reset,
+  underscore,
+  green,
+  red,
+  tab,
+} = colors;
+
+const successMessage = (name, hasError) => new Promise((res) => {
+  const message = !hasError
+    ? `${underscore}${name}${reset}:${green}${tab}ok!${reset}${EOL}`
+    : `${name}: FAILED!${EOL}`;
+  res(message);
+});
 
 const writeStyles = async (src, dest) => {
   const stream = createWriteStream(dest);
   const options = { withFileTypes: true };
   try {
-    const dirents = await readdir(src, options);
-    if (dirents.length !== 0) {
-      dirents.filter((dirent) => {
+    const components = await readdir(src, options);
+    const dirents = components
+      .filter((dirent) => {
         const { name } = dirent;
-        return extname(name) === '.css' || dirent.isDirectory();
+        return extname(name) === '.css' && dirent.isFile();
       })
-        .forEach(async (dirent) => {
-          const { name } = dirent;
-          const source = resolve(src, name);
-
-          const promise = dirent.isFile()
-            ? stream.write(await readFile(source, 'utf-8'))
-            : await writeStyles(source, dest);
-          Promise.all([promise]);
-
-          const msg = await successMessage(name, state.hasError);
-          stdout.write(msg);
-        });
-    }
+      .map(async (dirent) => {
+        const { name } = dirent;
+        const source = resolve(src, name);
+        stream.write(await readFile(source, 'utf-8'));
+        const msg = await successMessage(name, state.hasError);
+        stdout.write(msg);
+      });
+    Promise.all([dirents]);
   } catch ({ message }) {
     state.hasError = 'true';
-    stdout.write(`\x1b[31m${message}${EOL}`);
+    stdout.write(`${red}${message}${EOL}`);
   }
 };
 
