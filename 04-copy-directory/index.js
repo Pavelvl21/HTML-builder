@@ -20,21 +20,21 @@ const state = {
   hasError: false,
 };
 
-const copyFiles = async (dirent, dest) => {
+const copyFiles = async (src, dest) => {
   const options = { withFileTypes: true };
   try {
-    const direntPath = await readdir(dirent, options);
+    const dirents = await readdir(src, options);
     const destPath = await mkdir(dest, { recursive: true });
-    if (direntPath.length === 0) {
+    if (dirents.length === 0) {
       await mkdir(destPath, { recursive: true });
     }
-    direntPath.forEach(async (data) => {
-      const { name } = data;
-      const src = resolve(dirent, name);
-      const copySrc = resolve(destPath, name);
-      const promise = data.isFile()
-        ? await copyFile(src, copySrc)
-        : await copyFiles(src, copySrc);
+    dirents.forEach(async (dirent) => {
+      const { name } = dirent;
+      const source = resolve(src, name);
+      const destination = resolve(destPath, name);
+      const promise = dirent.isFile()
+        ? await copyFile(source, destination)
+        : await copyFiles(source, destination);
       Promise.all([promise]);
 
       const msg = await successMessage(name, state.hasError);
@@ -47,12 +47,12 @@ const copyFiles = async (dirent, dest) => {
 };
 
 const copyDir = async (dirname) => {
-  const dirent = resolve(__dirname, dirname);
+  const src = resolve(__dirname, dirname);
   const dest = resolve(__dirname, `${dirname}-copy`);
 
   try {
     await rm(dest, { recursive: true, force: true });
-    await copyFiles(dirent, dest);
+    await copyFiles(src, dest);
   } catch ({ message }) {
     stdout.write(`\x1b[31m${message}${EOL}`);
     throw message;
