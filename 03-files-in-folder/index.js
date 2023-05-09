@@ -1,5 +1,5 @@
 const { readdir, stat } = require('node:fs/promises');
-const { resolve } = require('node:path');
+const { resolve, extname } = require('node:path');
 const { EOL } = require('os');
 
 const { stdout } = process;
@@ -17,10 +17,10 @@ const {
 } = colors;
 
 const getFormattedData = (name, size) => {
-  const filename = name.substring(0, name.indexOf('.'));
-  const extname = name.slice(name.lastIndexOf('.') + 1);
+  const ext = extname(name);
+  const filename = name.replace(ext, '');
   const filesize = `${yellow}${size}${reset}${green}B${reset}`;
-  stdout.write(`${filename} - ${extname} - ${filesize}${EOL}`);
+  stdout.write(`${filename} - ${ext} - ${filesize}${EOL}`);
 };
 
 const getInfo = async (filename) => {
