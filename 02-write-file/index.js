@@ -1,6 +1,6 @@
 const readline = require('node:readline');
 const { stdin: input, stdout: output, exit } = require('node:process');
-const { createWriteStream } = require('fs');
+const { createWriteStream, promises } = require('fs');
 const { resolve } = require('node:path');
 const { EOL } = require('os');
 
@@ -34,13 +34,14 @@ const readfile = (filename) => {
     exit();
   };
 
-  const handleWrite = (inputText) => {
+  const handleWrite = (inputText) => new Promise((res) => {
     const writeableInput = inputText.trim().toLowerCase() === 'exit' ? handleClose() : inputText;
-    stream.write(`${writeableInput}${EOL}`);
-  };
+    promises.appendFile(filepath, `${writeableInput}${EOL}`);
+    res();
+  });
 
   rl.write(greeting);
-  rl.on('line', handleWrite);
+  rl.on('line', async (data) => await handleWrite(data));
   rl.on('SIGINT', handleClose);
   stream.on('error', handleError);
 };
